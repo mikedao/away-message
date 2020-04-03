@@ -3,14 +3,18 @@ class UsersController < ApplicationController
   end
 
   def create
-    new_user = User.create(user_params)
-    session[:user_id] = new_user.id
-    redirect_to dashboard_path
+    user = User.new(user_params)
+    if user.save
+      session[:user_id] = user.id
+      redirect_to dashboard_path
+    else
+      render :new
+    end
   end
 
   private
 
   def user_params
-    params.permit(:username, :password)
+    params.permit(:username, :password, :email)
   end
 end
